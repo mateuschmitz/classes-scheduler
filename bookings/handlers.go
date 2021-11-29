@@ -58,17 +58,17 @@ func (handler *BookingsHandler) Create(c *fiber.Ctx) error {
     }
 
     data.ClassID = int(class.ID)
-    item, err := handler.repository.Create(*data)
+    booking, err := handler.repository.Create(*data)
 
     if err != nil {
         return c.Status(500).JSON(fiber.Map{
             "status":  500,
-            "message": "Failed creating item",
+            "message": "Failed creating Booking",
             "error":   err,
         })
     }
 
-    return c.JSON(item)
+    return c.JSON(booking)
 }
 
 func NewBookingsHandler(repository *BookingsRepository, classesRepository *classes.ClassesRepository) *BookingsHandler {

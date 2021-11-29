@@ -47,7 +47,7 @@ func (handler *ClassesHandler) Create(c *fiber.Ctx) error {
         })
     }
 
-    item, err := handler.repository.Create(*data)
+    class, err := handler.repository.Create(*data)
 
     if err != nil {
         return c.Status(500).JSON(fiber.Map{
@@ -57,7 +57,7 @@ func (handler *ClassesHandler) Create(c *fiber.Ctx) error {
         })
     }
 
-    return c.JSON(item)
+    return c.JSON(class)
 }
 
 func NewClassesHandler(repository *ClassesRepository) *ClassesHandler {

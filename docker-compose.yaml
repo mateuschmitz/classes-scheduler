@@ -1,0 +1,52 @@
+version: "3.7"
+
+services:
+  classes-scheduler:
+    container_name: classes-scheduler
+    image: mateuschmitz/classes-scheduler:dev
+    build:
+      context: .
+      target: dev
+    volumes:
+      - .:/app
+    environment:
+      - TZ=America/Sao_Paulo
+    ports:
+      - "8080:8080"
+      - "2345:2345"
+    networks:
+      - classes-scheduler-network
+    depends_on:
+      - classes-scheduler-database
+
+  classes-scheduler-db:
+    container_name: classes-scheduler-db
+    image: postgres
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASS}
+      - POSTGRES_DB=${DATABASE_NAME}
+      - TZ=America/Sao_Paulo
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - classes-scheduler-network
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    environment:
+      - ADMINER_DEFAULT_SERVER=${DATABASE_HOST}
+    ports:
+      - 9090:8080
+    networks:
+      - classes-scheduler-network
+
+volumes:
+  postgres-db:
+
+networks:
+  classes-scheduler-network:
+    name: classes-scheduler-network
